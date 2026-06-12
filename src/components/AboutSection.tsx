@@ -17,9 +17,9 @@ export default function AboutSection() {
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             {[
-              "I'm a Technical Artist and Animator completing my Master's at CMU's Entertainment Technology Center. I've shipped production work at EA Motive Studio across two co-op terms, building rigging pipelines, VFX systems, and tools that let artists focus on what matters.",
+              "I'm a Technical Artist and Animator completed my Master's at CMU's Entertainment Technology Center. I've shipped production work at EA Motive Studio across two co-op terms, building rigging pipelines, VFX systems, and tools that let artists focus on what matters.",
               "My work lives at the intersection of art and code — I write Python pipelines in Maya, craft HLSL shaders in UE5, and build editor tools that make creative teams faster.",
-              "Currently building Moyu Office, a networking platform for game developers, and finishing my degree in 2026."
+              "Currently building Moyu Office, a networking platform for game developers."
             ].map((p, i) => (
               <p key={i} style={{ fontFamily: 'Inter', fontWeight: 300, fontSize: '0.9rem', color: 'var(--text-muted)', lineHeight: 1.8 }}>{p}</p>
             ))}

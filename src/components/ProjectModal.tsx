@@ -40,32 +40,40 @@ export default function ProjectModal({ project, onClose }: Props) {
   const currentMedia = media[mediaIndex]
 
   return (
-    <div style={{
-      position: 'fixed', inset: 0, zIndex: 100,
-      background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(12px)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      padding: '1rem',
-    }} onClick={onClose}>
-      <div onClick={e => e.stopPropagation()} style={{
-        background: 'var(--surface)',
-        border: '1px solid var(--border)',
-        borderRadius: '10px',
-        width: '100%', maxWidth: '1000px',
-        maxHeight: '90vh', overflowY: 'auto',
-        display: 'grid', gridTemplateColumns: '1fr 1fr',
-      }}>
-        {/* Left: Media viewer */}
+    <div
+      style={{
+        position: 'fixed', inset: 0, zIndex: 100,
+        background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(12px)',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        padding: '1.5rem',
+      }}
+      onClick={onClose}
+    >
+      <div
+        onClick={e => e.stopPropagation()}
+        style={{
+          background: 'var(--surface)',
+          border: '1px solid var(--border)',
+          borderRadius: '10px',
+          width: '100%', maxWidth: '1400px',
+          height: '90vh',
+          display: 'grid', gridTemplateColumns: '1.15fr 1fr',
+          overflow: 'hidden', // each column handles its own scroll
+        }}
+      >
+        {/* ── Left: Media viewer ── */}
         <div style={{
           background: 'var(--surface-2)',
           borderRight: '1px solid var(--border)',
           borderRadius: '10px 0 0 10px',
-          position: 'sticky', top: 0, maxHeight: '90vh',
           display: 'flex', flexDirection: 'column',
+          overflow: 'hidden',
         }}>
-          {/* Main viewer */}
+          {/* Main viewer — expands to fill all leftover space */}
           <div style={{
-            flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center',
-            minHeight: '360px', position: 'relative', overflow: 'hidden',
+            flex: 1, minHeight: 0,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            position: 'relative', overflow: 'hidden',
           }}>
             {media.length === 0 && (
               <div style={{ textAlign: 'center', opacity: 0.3 }}>
@@ -74,11 +82,18 @@ export default function ProjectModal({ project, onClose }: Props) {
               </div>
             )}
             {currentMedia?.type === 'image' && (
-              <img src={currentMedia.url} alt={currentMedia.caption || project.title}
-                style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '1rem' }} />
+              <img
+                src={currentMedia.url}
+                alt={currentMedia.caption || project.title}
+                style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '1.25rem' }}
+              />
             )}
             {currentMedia?.type === 'video' && (
-              <video src={currentMedia.url} controls style={{ width: '100%', maxHeight: '400px' }} />
+              <video
+                src={currentMedia.url}
+                controls
+                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+              />
             )}
             {currentMedia?.type === 'pdf' && (
               <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '1rem', padding: '2rem' }}>
@@ -92,47 +107,83 @@ export default function ProjectModal({ project, onClose }: Props) {
               </div>
             )}
 
-            {/* Arrows */}
+            {/* Prev / Next arrows */}
             {media.length > 1 && (
               <>
-                <button onClick={() => setMediaIndex(i => Math.max(i - 1, 0))} style={{
-                  position: 'absolute', left: '0.5rem', top: '50%', transform: 'translateY(-50%)',
+                <button
+                  onClick={() => setMediaIndex(i => Math.max(i - 1, 0))}
+                  style={{
+                    position: 'absolute', left: '0.75rem', top: '50%', transform: 'translateY(-50%)',
+                    background: 'rgba(13,13,15,0.85)', border: '1px solid var(--border)',
+                    borderRadius: '5px', padding: '0.5rem', cursor: 'pointer',
+                    opacity: mediaIndex === 0 ? 0.25 : 1, transition: 'opacity 0.15s',
+                  }}
+                >
+                  <ChevronLeft size={20} color="var(--text)" />
+                </button>
+                <button
+                  onClick={() => setMediaIndex(i => Math.min(i + 1, media.length - 1))}
+                  style={{
+                    position: 'absolute', right: '0.75rem', top: '50%', transform: 'translateY(-50%)',
+                    background: 'rgba(13,13,15,0.85)', border: '1px solid var(--border)',
+                    borderRadius: '5px', padding: '0.5rem', cursor: 'pointer',
+                    opacity: mediaIndex === media.length - 1 ? 0.25 : 1, transition: 'opacity 0.15s',
+                  }}
+                >
+                  <ChevronRight size={20} color="var(--text)" />
+                </button>
+
+                {/* Index counter */}
+                <div style={{
+                  position: 'absolute', bottom: '0.75rem', right: '0.75rem',
                   background: 'rgba(13,13,15,0.8)', border: '1px solid var(--border)',
-                  borderRadius: '4px', padding: '0.4rem', cursor: 'pointer',
-                  opacity: mediaIndex === 0 ? 0.3 : 1,
-                }}><ChevronLeft size={16} color="var(--text)" /></button>
-                <button onClick={() => setMediaIndex(i => Math.min(i + 1, media.length - 1))} style={{
-                  position: 'absolute', right: '0.5rem', top: '50%', transform: 'translateY(-50%)',
-                  background: 'rgba(13,13,15,0.8)', border: '1px solid var(--border)',
-                  borderRadius: '4px', padding: '0.4rem', cursor: 'pointer',
-                  opacity: mediaIndex === media.length - 1 ? 0.3 : 1,
-                }}><ChevronRight size={16} color="var(--text)" /></button>
+                  borderRadius: '3px', padding: '0.2rem 0.5rem',
+                }}>
+                  <span style={{ fontFamily: 'JetBrains Mono', fontSize: '0.6rem', color: 'var(--text-dim)', letterSpacing: '0.08em' }}>
+                    {mediaIndex + 1} / {media.length}
+                  </span>
+                </div>
               </>
             )}
           </div>
 
-          {/* Thumbnails */}
+          {/* Thumbnail strip — horizontally scrollable */}
           {media.length > 1 && (
             <div style={{
-              display: 'flex', gap: '0.5rem', padding: '0.75rem',
-              borderTop: '1px solid var(--border)', overflowX: 'auto',
+              flexShrink: 0,
+              display: 'flex', gap: '0.5rem',
+              padding: '0.75rem',
+              borderTop: '1px solid var(--border)',
+              overflowX: 'auto',
             }}>
               {media.map((m, i) => (
-                <button key={m.id} onClick={() => setMediaIndex(i)} style={{
-                  width: '52px', height: '52px', flexShrink: 0,
-                  background: m.type === 'image' ? `url(${m.url}) center/cover` : 'var(--surface)',
-                  border: `1px solid ${i === mediaIndex ? 'var(--gold)' : 'var(--border)'}`,
-                  borderRadius: '3px', cursor: 'pointer',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                }}>
-                  {m.type !== 'image' && <FileText size={16} color="var(--text-dim)" />}
+                <button
+                  key={m.id}
+                  onClick={() => setMediaIndex(i)}
+                  style={{
+                    width: '80px', height: '60px', flexShrink: 0,
+                    background: m.type === 'image' ? `url(${m.url}) center/cover` : 'var(--surface)',
+                    border: `2px solid ${i === mediaIndex ? 'var(--gold)' : 'var(--border)'}`,
+                    borderRadius: '4px', cursor: 'pointer',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    transition: 'border-color 0.15s',
+                    outline: 'none',
+                  }}
+                >
+                  {m.type !== 'image' && (
+                    <span style={{ fontFamily: 'JetBrains Mono', fontSize: '0.55rem', color: 'var(--gold)', letterSpacing: '0.06em' }}>
+                      {m.type.toUpperCase()}
+                    </span>
+                  )}
                 </button>
               ))}
             </div>
           )}
 
+          {/* Caption bar */}
           {currentMedia?.caption && (
             <p style={{
+              flexShrink: 0,
               fontFamily: 'JetBrains Mono', fontSize: '0.62rem', color: 'var(--text-dim)',
               padding: '0.5rem 0.75rem', borderTop: '1px solid var(--border)',
               letterSpacing: '0.05em',
@@ -140,47 +191,66 @@ export default function ProjectModal({ project, onClose }: Props) {
           )}
         </div>
 
-        {/* Right: Text content */}
-        <div style={{ padding: '2rem', display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+        {/* ── Right: Text content — independently scrollable ── */}
+        <div style={{
+          display: 'flex', flexDirection: 'column',
+          overflow: 'hidden', // clip; inner div scrolls
+        }}>
+          {/* Sticky close + title header */}
+          <div style={{
+            flexShrink: 0,
+            display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start',
+            padding: '2rem 2rem 1.25rem',
+            borderBottom: '1px solid var(--border)',
+          }}>
             <div>
-              <p style={{ fontFamily: 'JetBrains Mono', fontSize: '0.65rem', color: 'var(--gold)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
+              <p style={{ fontFamily: 'JetBrains Mono', fontSize: '0.7rem', color: 'var(--gold)', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
                 {project.category}
               </p>
-              <h2 style={{ fontFamily: 'Space Grotesk', fontWeight: 700, fontSize: '1.6rem', lineHeight: 1.2 }}>
+              <h2 style={{ fontFamily: 'Space Grotesk', fontWeight: 700, fontSize: '2rem', lineHeight: 1.2 }}>
                 {project.title}
               </h2>
             </div>
-            <button onClick={onClose} style={{
-              background: 'var(--surface-2)', border: '1px solid var(--border)',
-              borderRadius: '4px', padding: '0.4rem', cursor: 'pointer',
-              display: 'flex', alignItems: 'center', flexShrink: 0,
-            }}><X size={14} color="var(--text-muted)" /></button>
+            <button
+              onClick={onClose}
+              style={{
+                background: 'var(--surface-2)', border: '1px solid var(--border)',
+                borderRadius: '4px', padding: '0.4rem', cursor: 'pointer',
+                display: 'flex', alignItems: 'center', flexShrink: 0,
+              }}
+            >
+              <X size={16} color="var(--text-muted)" />
+            </button>
           </div>
 
-          <p style={{ fontFamily: 'Inter', fontWeight: 300, fontSize: '0.9rem', color: 'var(--text-muted)', lineHeight: 1.7 }}>
-            {project.description}
-          </p>
+          {/* Scrollable body */}
+          <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: '1.75rem 2rem 2rem' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+              <p style={{ fontFamily: 'Inter', fontWeight: 300, fontSize: '1rem', color: 'var(--text-muted)', lineHeight: 1.7 }}>
+                {project.description}
+              </p>
 
-          {project.tags?.length > 0 && (
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
-              {project.tags.map(tag => (
-                <span key={tag} style={{
-                  fontFamily: 'JetBrains Mono', fontSize: '0.6rem',
-                  background: 'var(--surface-2)', border: '1px solid var(--border)',
-                  borderRadius: '3px', padding: '0.2rem 0.5rem',
-                  color: 'var(--text-dim)', letterSpacing: '0.06em',
-                }}>{tag}</span>
-              ))}
+              {project.tags?.length > 0 && (
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.35rem' }}>
+                  {project.tags.map(tag => (
+                    <span key={tag} style={{
+                      fontFamily: 'JetBrains Mono', fontSize: '0.6rem',
+                      background: 'var(--surface-2)', border: '1px solid var(--border)',
+                      borderRadius: '3px', padding: '0.2rem 0.5rem',
+                      color: 'var(--text-dim)', letterSpacing: '0.06em',
+                    }}>{tag}</span>
+                  ))}
+                </div>
+              )}
+
+              {project.writeup && (
+                <div
+                  style={{ borderTop: '1px solid var(--border)', paddingTop: '1.25rem', fontFamily: 'Inter', fontSize: '0.95rem' }}
+                  dangerouslySetInnerHTML={{ __html: renderMarkdown(project.writeup) }}
+                />
+              )}
             </div>
-          )}
-
-          {project.writeup && (
-            <div style={{
-              borderTop: '1px solid var(--border)', paddingTop: '1.25rem',
-              fontFamily: 'Inter', fontSize: '0.875rem',
-            }} dangerouslySetInnerHTML={{ __html: renderMarkdown(project.writeup) }} />
-          )}
+          </div>
         </div>
       </div>
     </div>

@@ -335,6 +335,44 @@ const DEMO_PROJECTS = [
         featured: false,
         order_index: 2,
         created_at: new Date().toISOString()
+    },
+    {
+        id: '4',
+        slug: 'unity-ue5-game-dev',
+        title: 'Game Development',
+        category: 'Game Dev',
+        tags: [
+            'Unity',
+            'UE5',
+            'C#',
+            'Blueprints'
+        ],
+        description: 'Interactive experiences and gameplay prototypes built in Unity and Unreal Engine 5.',
+        writeup: `## Overview\n\nGame development projects spanning Unity and Unreal Engine 5 — from gameplay prototyping to full production pipelines.\n\n## Unity Projects\n\nC# scripting for gameplay systems, custom editor tooling, and asset pipeline automation.\n\n## UE5 Projects\n\nBlueprint and C++ gameplay logic, Lumen lighting setups, and integration with the animation and VFX pipeline.\n\n## Highlights\n\n- Custom gameplay systems in Unity and UE5\n- Editor tooling for faster iteration\n- Cross-engine asset pipeline experience`,
+        cover_url: '',
+        media: [],
+        featured: false,
+        order_index: 3,
+        created_at: new Date().toISOString()
+    },
+    {
+        id: '5',
+        slug: 'environment-art',
+        title: 'Environment Art',
+        category: 'Environment Art',
+        tags: [
+            'UE5',
+            'Houdini',
+            'Substance',
+            'World Building'
+        ],
+        description: 'Real-time environment art — modular kits, terrain, lighting, and atmospheric composition.',
+        writeup: `## Overview\n\nEnvironment art projects focused on real-time world building, from modular asset kits to full scene composition.\n\n## Approach\n\nModular kit design keeps memory budgets tight while letting level designers snap together believable spaces. Houdini procedural tools generate terrain and scatter foliage at scale.\n\n## Highlights\n\n- Modular architecture kits (trim sheets, tileable materials)\n- Houdini-driven terrain and foliage scatter\n- Lumen and HDRI lighting composition\n- Substance Designer material authoring`,
+        cover_url: '',
+        media: [],
+        featured: false,
+        order_index: 4,
+        created_at: new Date().toISOString()
     }
 ];
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
@@ -849,6 +887,8 @@ const CATEGORIES = [
     'Tools',
     'VFX',
     'Pipeline',
+    'Game Dev',
+    'Environment Art',
     'Other'
 ];
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
@@ -1254,7 +1294,7 @@ function ProjectModal({ project, onClose }) {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: '1rem'
+            padding: '1.5rem'
         },
         onClick: onClose,
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1264,11 +1304,11 @@ function ProjectModal({ project, onClose }) {
                 border: '1px solid var(--border)',
                 borderRadius: '10px',
                 width: '100%',
-                maxWidth: '1000px',
-                maxHeight: '90vh',
-                overflowY: 'auto',
+                maxWidth: '1400px',
+                height: '90vh',
                 display: 'grid',
-                gridTemplateColumns: '1fr 1fr'
+                gridTemplateColumns: '1.15fr 1fr',
+                overflow: 'hidden'
             },
             children: [
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1276,20 +1316,18 @@ function ProjectModal({ project, onClose }) {
                         background: 'var(--surface-2)',
                         borderRight: '1px solid var(--border)',
                         borderRadius: '10px 0 0 10px',
-                        position: 'sticky',
-                        top: 0,
-                        maxHeight: '90vh',
                         display: 'flex',
-                        flexDirection: 'column'
+                        flexDirection: 'column',
+                        overflow: 'hidden'
                     },
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             style: {
                                 flex: 1,
+                                minHeight: 0,
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
-                                minHeight: '360px',
                                 position: 'relative',
                                 overflow: 'hidden'
                             },
@@ -1307,7 +1345,7 @@ function ProjectModal({ project, onClose }) {
                                             children: "◻"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/ProjectModal.tsx",
-                                            lineNumber: 72,
+                                            lineNumber: 80,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1321,13 +1359,13 @@ function ProjectModal({ project, onClose }) {
                                             children: "NO MEDIA"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/ProjectModal.tsx",
-                                            lineNumber: 73,
+                                            lineNumber: 81,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/ProjectModal.tsx",
-                                    lineNumber: 71,
+                                    lineNumber: 79,
                                     columnNumber: 15
                                 }, this),
                                 currentMedia?.type === 'image' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
@@ -1337,11 +1375,11 @@ function ProjectModal({ project, onClose }) {
                                         width: '100%',
                                         height: '100%',
                                         objectFit: 'contain',
-                                        padding: '1rem'
+                                        padding: '1.25rem'
                                     }
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/ProjectModal.tsx",
-                                    lineNumber: 77,
+                                    lineNumber: 85,
                                     columnNumber: 15
                                 }, this),
                                 currentMedia?.type === 'video' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("video", {
@@ -1349,11 +1387,12 @@ function ProjectModal({ project, onClose }) {
                                     controls: true,
                                     style: {
                                         width: '100%',
-                                        maxHeight: '400px'
+                                        height: '100%',
+                                        objectFit: 'contain'
                                     }
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/ProjectModal.tsx",
-                                    lineNumber: 81,
+                                    lineNumber: 92,
                                     columnNumber: 15
                                 }, this),
                                 currentMedia?.type === 'pdf' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1373,7 +1412,7 @@ function ProjectModal({ project, onClose }) {
                                             color: "var(--gold-dim)"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/ProjectModal.tsx",
-                                            lineNumber: 85,
+                                            lineNumber: 100,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -1386,7 +1425,7 @@ function ProjectModal({ project, onClose }) {
                                             children: currentMedia.caption || 'Document'
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/ProjectModal.tsx",
-                                            lineNumber: 86,
+                                            lineNumber: 101,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
@@ -1406,13 +1445,13 @@ function ProjectModal({ project, onClose }) {
                                             children: "Open PDF"
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/ProjectModal.tsx",
-                                            lineNumber: 87,
+                                            lineNumber: 102,
                                             columnNumber: 17
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/ProjectModal.tsx",
-                                    lineNumber: 84,
+                                    lineNumber: 99,
                                     columnNumber: 15
                                 }, this),
                                 media.length > 1 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["Fragment"], {
@@ -1421,54 +1460,88 @@ function ProjectModal({ project, onClose }) {
                                             onClick: ()=>setMediaIndex((i)=>Math.max(i - 1, 0)),
                                             style: {
                                                 position: 'absolute',
-                                                left: '0.5rem',
+                                                left: '0.75rem',
                                                 top: '50%',
                                                 transform: 'translateY(-50%)',
-                                                background: 'rgba(13,13,15,0.8)',
+                                                background: 'rgba(13,13,15,0.85)',
                                                 border: '1px solid var(--border)',
-                                                borderRadius: '4px',
-                                                padding: '0.4rem',
+                                                borderRadius: '5px',
+                                                padding: '0.5rem',
                                                 cursor: 'pointer',
-                                                opacity: mediaIndex === 0 ? 0.3 : 1
+                                                opacity: mediaIndex === 0 ? 0.25 : 1,
+                                                transition: 'opacity 0.15s'
                                             },
                                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$left$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronLeft$3e$__["ChevronLeft"], {
-                                                size: 16,
+                                                size: 20,
                                                 color: "var(--text)"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/ProjectModal.tsx",
-                                                lineNumber: 103,
-                                                columnNumber: 20
+                                                lineNumber: 122,
+                                                columnNumber: 19
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/ProjectModal.tsx",
-                                            lineNumber: 98,
+                                            lineNumber: 113,
                                             columnNumber: 17
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                             onClick: ()=>setMediaIndex((i)=>Math.min(i + 1, media.length - 1)),
                                             style: {
                                                 position: 'absolute',
-                                                right: '0.5rem',
+                                                right: '0.75rem',
                                                 top: '50%',
                                                 transform: 'translateY(-50%)',
-                                                background: 'rgba(13,13,15,0.8)',
+                                                background: 'rgba(13,13,15,0.85)',
                                                 border: '1px solid var(--border)',
-                                                borderRadius: '4px',
-                                                padding: '0.4rem',
+                                                borderRadius: '5px',
+                                                padding: '0.5rem',
                                                 cursor: 'pointer',
-                                                opacity: mediaIndex === media.length - 1 ? 0.3 : 1
+                                                opacity: mediaIndex === media.length - 1 ? 0.25 : 1,
+                                                transition: 'opacity 0.15s'
                                             },
                                             children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$right$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronRight$3e$__["ChevronRight"], {
-                                                size: 16,
+                                                size: 20,
                                                 color: "var(--text)"
                                             }, void 0, false, {
                                                 fileName: "[project]/src/components/ProjectModal.tsx",
-                                                lineNumber: 109,
-                                                columnNumber: 20
+                                                lineNumber: 133,
+                                                columnNumber: 19
                                             }, this)
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/ProjectModal.tsx",
-                                            lineNumber: 104,
+                                            lineNumber: 124,
+                                            columnNumber: 17
+                                        }, this),
+                                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                            style: {
+                                                position: 'absolute',
+                                                bottom: '0.75rem',
+                                                right: '0.75rem',
+                                                background: 'rgba(13,13,15,0.8)',
+                                                border: '1px solid var(--border)',
+                                                borderRadius: '3px',
+                                                padding: '0.2rem 0.5rem'
+                                            },
+                                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                style: {
+                                                    fontFamily: 'JetBrains Mono',
+                                                    fontSize: '0.6rem',
+                                                    color: 'var(--text-dim)',
+                                                    letterSpacing: '0.08em'
+                                                },
+                                                children: [
+                                                    mediaIndex + 1,
+                                                    " / ",
+                                                    media.length
+                                                ]
+                                            }, void 0, true, {
+                                                fileName: "[project]/src/components/ProjectModal.tsx",
+                                                lineNumber: 142,
+                                                columnNumber: 19
+                                            }, this)
+                                        }, void 0, false, {
+                                            fileName: "[project]/src/components/ProjectModal.tsx",
+                                            lineNumber: 137,
                                             columnNumber: 17
                                         }, this)
                                     ]
@@ -1476,11 +1549,12 @@ function ProjectModal({ project, onClose }) {
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/ProjectModal.tsx",
-                            lineNumber: 66,
+                            lineNumber: 73,
                             columnNumber: 11
                         }, this),
                         media.length > 1 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             style: {
+                                flexShrink: 0,
                                 display: 'flex',
                                 gap: '0.5rem',
                                 padding: '0.75rem',
@@ -1490,37 +1564,45 @@ function ProjectModal({ project, onClose }) {
                             children: media.map((m, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                     onClick: ()=>setMediaIndex(i),
                                     style: {
-                                        width: '52px',
-                                        height: '52px',
+                                        width: '80px',
+                                        height: '60px',
                                         flexShrink: 0,
                                         background: m.type === 'image' ? `url(${m.url}) center/cover` : 'var(--surface)',
-                                        border: `1px solid ${i === mediaIndex ? 'var(--gold)' : 'var(--border)'}`,
-                                        borderRadius: '3px',
+                                        border: `2px solid ${i === mediaIndex ? 'var(--gold)' : 'var(--border)'}`,
+                                        borderRadius: '4px',
                                         cursor: 'pointer',
                                         display: 'flex',
                                         alignItems: 'center',
-                                        justifyContent: 'center'
+                                        justifyContent: 'center',
+                                        transition: 'border-color 0.15s',
+                                        outline: 'none'
                                     },
-                                    children: m.type !== 'image' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$file$2d$text$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__FileText$3e$__["FileText"], {
-                                        size: 16,
-                                        color: "var(--text-dim)"
+                                    children: m.type !== 'image' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                        style: {
+                                            fontFamily: 'JetBrains Mono',
+                                            fontSize: '0.55rem',
+                                            color: 'var(--gold)',
+                                            letterSpacing: '0.06em'
+                                        },
+                                        children: m.type.toUpperCase()
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/ProjectModal.tsx",
-                                        lineNumber: 128,
-                                        columnNumber: 42
+                                        lineNumber: 174,
+                                        columnNumber: 21
                                     }, this)
                                 }, m.id, false, {
                                     fileName: "[project]/src/components/ProjectModal.tsx",
-                                    lineNumber: 121,
+                                    lineNumber: 160,
                                     columnNumber: 17
                                 }, this))
                         }, void 0, false, {
                             fileName: "[project]/src/components/ProjectModal.tsx",
-                            lineNumber: 116,
+                            lineNumber: 152,
                             columnNumber: 13
                         }, this),
                         currentMedia?.caption && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                             style: {
+                                flexShrink: 0,
                                 fontFamily: 'JetBrains Mono',
                                 fontSize: '0.62rem',
                                 color: 'var(--text-dim)',
@@ -1531,28 +1613,30 @@ function ProjectModal({ project, onClose }) {
                             children: currentMedia.caption
                         }, void 0, false, {
                             fileName: "[project]/src/components/ProjectModal.tsx",
-                            lineNumber: 135,
+                            lineNumber: 185,
                             columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/ProjectModal.tsx",
-                    lineNumber: 58,
+                    lineNumber: 65,
                     columnNumber: 9
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     style: {
-                        padding: '2rem',
                         display: 'flex',
                         flexDirection: 'column',
-                        gap: '1.25rem'
+                        overflow: 'hidden'
                     },
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             style: {
+                                flexShrink: 0,
                                 display: 'flex',
                                 justifyContent: 'space-between',
-                                alignItems: 'flex-start'
+                                alignItems: 'flex-start',
+                                padding: '2rem 2rem 1.25rem',
+                                borderBottom: '1px solid var(--border)'
                             },
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1560,7 +1644,7 @@ function ProjectModal({ project, onClose }) {
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                             style: {
                                                 fontFamily: 'JetBrains Mono',
-                                                fontSize: '0.65rem',
+                                                fontSize: '0.7rem',
                                                 color: 'var(--gold)',
                                                 letterSpacing: '0.12em',
                                                 textTransform: 'uppercase',
@@ -1569,26 +1653,26 @@ function ProjectModal({ project, onClose }) {
                                             children: project.category
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/ProjectModal.tsx",
-                                            lineNumber: 147,
+                                            lineNumber: 207,
                                             columnNumber: 15
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
                                             style: {
                                                 fontFamily: 'Space Grotesk',
                                                 fontWeight: 700,
-                                                fontSize: '1.6rem',
+                                                fontSize: '2rem',
                                                 lineHeight: 1.2
                                             },
                                             children: project.title
                                         }, void 0, false, {
                                             fileName: "[project]/src/components/ProjectModal.tsx",
-                                            lineNumber: 150,
+                                            lineNumber: 210,
                                             columnNumber: 15
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/components/ProjectModal.tsx",
-                                    lineNumber: 146,
+                                    lineNumber: 206,
                                     columnNumber: 13
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -1604,91 +1688,116 @@ function ProjectModal({ project, onClose }) {
                                         flexShrink: 0
                                     },
                                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$mjs__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__["X"], {
-                                        size: 14,
+                                        size: 16,
                                         color: "var(--text-muted)"
                                     }, void 0, false, {
                                         fileName: "[project]/src/components/ProjectModal.tsx",
-                                        lineNumber: 158,
-                                        columnNumber: 16
+                                        lineNumber: 222,
+                                        columnNumber: 15
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/components/ProjectModal.tsx",
-                                    lineNumber: 154,
+                                    lineNumber: 214,
                                     columnNumber: 13
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/components/ProjectModal.tsx",
-                            lineNumber: 145,
+                            lineNumber: 200,
                             columnNumber: 11
                         }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                             style: {
-                                fontFamily: 'Inter',
-                                fontWeight: 300,
-                                fontSize: '0.9rem',
-                                color: 'var(--text-muted)',
-                                lineHeight: 1.7
+                                flex: 1,
+                                minHeight: 0,
+                                overflowY: 'auto',
+                                padding: '1.75rem 2rem 2rem'
                             },
-                            children: project.description
+                            children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                style: {
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    gap: '1.5rem'
+                                },
+                                children: [
+                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                        style: {
+                                            fontFamily: 'Inter',
+                                            fontWeight: 300,
+                                            fontSize: '1rem',
+                                            color: 'var(--text-muted)',
+                                            lineHeight: 1.7
+                                        },
+                                        children: project.description
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/components/ProjectModal.tsx",
+                                        lineNumber: 229,
+                                        columnNumber: 15
+                                    }, this),
+                                    project.tags?.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        style: {
+                                            display: 'flex',
+                                            flexWrap: 'wrap',
+                                            gap: '0.35rem'
+                                        },
+                                        children: project.tags.map((tag)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
+                                                style: {
+                                                    fontFamily: 'JetBrains Mono',
+                                                    fontSize: '0.6rem',
+                                                    background: 'var(--surface-2)',
+                                                    border: '1px solid var(--border)',
+                                                    borderRadius: '3px',
+                                                    padding: '0.2rem 0.5rem',
+                                                    color: 'var(--text-dim)',
+                                                    letterSpacing: '0.06em'
+                                                },
+                                                children: tag
+                                            }, tag, false, {
+                                                fileName: "[project]/src/components/ProjectModal.tsx",
+                                                lineNumber: 236,
+                                                columnNumber: 21
+                                            }, this))
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/components/ProjectModal.tsx",
+                                        lineNumber: 234,
+                                        columnNumber: 17
+                                    }, this),
+                                    project.writeup && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                        style: {
+                                            borderTop: '1px solid var(--border)',
+                                            paddingTop: '1.25rem',
+                                            fontFamily: 'Inter',
+                                            fontSize: '0.95rem'
+                                        },
+                                        dangerouslySetInnerHTML: {
+                                            __html: renderMarkdown(project.writeup)
+                                        }
+                                    }, void 0, false, {
+                                        fileName: "[project]/src/components/ProjectModal.tsx",
+                                        lineNumber: 247,
+                                        columnNumber: 17
+                                    }, this)
+                                ]
+                            }, void 0, true, {
+                                fileName: "[project]/src/components/ProjectModal.tsx",
+                                lineNumber: 228,
+                                columnNumber: 13
+                            }, this)
                         }, void 0, false, {
                             fileName: "[project]/src/components/ProjectModal.tsx",
-                            lineNumber: 161,
+                            lineNumber: 227,
                             columnNumber: 11
-                        }, this),
-                        project.tags?.length > 0 && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            style: {
-                                display: 'flex',
-                                flexWrap: 'wrap',
-                                gap: '0.35rem'
-                            },
-                            children: project.tags.map((tag)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-                                    style: {
-                                        fontFamily: 'JetBrains Mono',
-                                        fontSize: '0.6rem',
-                                        background: 'var(--surface-2)',
-                                        border: '1px solid var(--border)',
-                                        borderRadius: '3px',
-                                        padding: '0.2rem 0.5rem',
-                                        color: 'var(--text-dim)',
-                                        letterSpacing: '0.06em'
-                                    },
-                                    children: tag
-                                }, tag, false, {
-                                    fileName: "[project]/src/components/ProjectModal.tsx",
-                                    lineNumber: 168,
-                                    columnNumber: 17
-                                }, this))
-                        }, void 0, false, {
-                            fileName: "[project]/src/components/ProjectModal.tsx",
-                            lineNumber: 166,
-                            columnNumber: 13
-                        }, this),
-                        project.writeup && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            style: {
-                                borderTop: '1px solid var(--border)',
-                                paddingTop: '1.25rem',
-                                fontFamily: 'Inter',
-                                fontSize: '0.875rem'
-                            },
-                            dangerouslySetInnerHTML: {
-                                __html: renderMarkdown(project.writeup)
-                            }
-                        }, void 0, false, {
-                            fileName: "[project]/src/components/ProjectModal.tsx",
-                            lineNumber: 179,
-                            columnNumber: 13
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/components/ProjectModal.tsx",
-                    lineNumber: 144,
+                    lineNumber: 195,
                     columnNumber: 9
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/src/components/ProjectModal.tsx",
-            lineNumber: 49,
+            lineNumber: 52,
             columnNumber: 7
         }, this)
     }, void 0, false, {
@@ -2861,9 +2970,9 @@ function AboutSection() {
                                 gap: '1rem'
                             },
                             children: [
-                                "I'm a Technical Artist and Animator completing my Master's at CMU's Entertainment Technology Center. I've shipped production work at EA Motive Studio across two co-op terms, building rigging pipelines, VFX systems, and tools that let artists focus on what matters.",
+                                "I'm a Technical Artist and Animator completed my Master's at CMU's Entertainment Technology Center. I've shipped production work at EA Motive Studio across two co-op terms, building rigging pipelines, VFX systems, and tools that let artists focus on what matters.",
                                 "My work lives at the intersection of art and code — I write Python pipelines in Maya, craft HLSL shaders in UE5, and build editor tools that make creative teams faster.",
-                                "Currently building Moyu Office, a networking platform for game developers, and finishing my degree in 2026."
+                                "Currently building Moyu Office, a networking platform for game developers."
                             ].map((p, i)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                     style: {
                                         fontFamily: 'Inter',
@@ -3111,13 +3220,13 @@ function ContactSection() {
     const links = [
         {
             label: 'Email',
-            value: 'hello@elianahuang.site',
-            href: 'mailto:hello@elianahuang.site'
+            value: 'elianahuang2020@gmail.com',
+            href: 'mailto:elianahuang2020@gmail.com'
         },
         {
             label: 'LinkedIn',
-            value: 'linkedin.com/in/elianahuang',
-            href: 'https://linkedin.com/in/elianahuang'
+            value: 'linkedin.com/in/eliana-huang',
+            href: 'https://linkedin.com/in/eliana-huang/'
         },
         {
             label: 'Portfolio',

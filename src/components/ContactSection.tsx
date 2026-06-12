@@ -1,8 +1,8 @@
 'use client'
 export default function ContactSection() {
   const links = [
-    { label: 'Email', value: 'hello@elianahuang.site', href: 'mailto:hello@elianahuang.site' },
-    { label: 'LinkedIn', value: 'linkedin.com/in/elianahuang', href: 'https://linkedin.com/in/elianahuang' },
+    { label: 'Email', value: 'elianahuang2020@gmail.com', href: 'mailto:elianahuang2020@gmail.com' },
+    { label: 'LinkedIn', value: 'linkedin.com/in/eliana-huang', href: 'https://linkedin.com/in/eliana-huang/' },
     { label: 'Portfolio', value: 'elianahuang.site', href: 'https://elianahuang.site' },
   ]
 

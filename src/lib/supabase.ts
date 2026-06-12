@@ -33,4 +33,4 @@ export interface Project {
   created_at: string
 }
 
-export const CATEGORIES = ['All', 'Technical Art', 'Animation', 'Tools', 'VFX', 'Pipeline', 'Other']
+export const CATEGORIES = ['All', 'Technical Art', 'Animation', 'Tools', 'VFX', 'Pipeline', 'Game Dev', 'Environment Art', 'Other']
