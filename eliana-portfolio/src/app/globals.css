@@ -1,0 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #0D0D0F;
+  --surface: #111115;
+  --surface-2: #1A1A1F;
+  --border: #2A2A32;
+  --border-2: #3A3A42;
+  --text: #F0EDE8;
+  --text-muted: #8A8A96;
+  --text-dim: #4A4A56;
+  --gold: #C8A96E;
+  --gold-dim: #8A7048;
+  --gold-bright: #DFC088;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  scroll-behavior: smooth;
+  background: var(--bg);
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+.font-display { font-family: 'Space Grotesk', sans-serif; }
+.font-mono { font-family: 'JetBrains Mono', monospace; }
+
+/* Scanline grid - the signature element */
+.scanline-hover {
+  position: relative;
+  overflow: hidden;
+}
+.scanline-hover::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: 
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 3px,
+      rgba(200, 169, 110, 0.03) 3px,
+      rgba(200, 169, 110, 0.03) 4px
+    );
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  z-index: 1;
+}
+.scanline-hover:hover::after { opacity: 1; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--gold-dim); }
+
+/* Focus */
+:focus-visible { outline: 1px solid var(--gold); outline-offset: 2px; }
+
+/* Selection */
+::selection { background: rgba(200, 169, 110, 0.2); }
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}
