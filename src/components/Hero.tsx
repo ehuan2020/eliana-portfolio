@@ -1,9 +1,86 @@
 'use client'
 import { useEffect, useState } from 'react'
+import { Project } from '@/lib/supabase'
+import { DEMO_PROJECTS } from '@/lib/demo-data'
 
-export default function Hero() {
+const TILE_W = 280
+const TILE_H = 180
+// marginRight instead of flex gap so total width = N * (TILE_W + TILE_GAP), making -50% a perfect half-set boundary
+const TILE_GAP = 12
+
+// 6 copies → 3 copies per half → translateX(-50%) resets exactly at the start of a copy
+function buildTrack(projects: Project[]): Project[] {
+  const track: Project[] = []
+  for (let i = 0; i < 6; i++) track.push(...projects)
+  return track
+}
+
+function GalleryTile({ project }: { project: Project }) {
+  return (
+    <div style={{
+      width: TILE_W,
+      height: TILE_H,
+      flexShrink: 0,
+      marginRight: TILE_GAP,
+      borderRadius: '4px',
+      overflow: 'hidden',
+      border: '1px solid var(--border)',
+      background: 'var(--surface)',
+      position: 'relative',
+    }}>
+      {project.cover_url ? (
+        <img
+          src={project.cover_url}
+          alt=""
+          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+        />
+      ) : (
+        <>
+          <div style={{
+            position: 'absolute', inset: 0,
+            backgroundImage: [
+              'linear-gradient(var(--border) 1px, transparent 1px)',
+              'linear-gradient(90deg, var(--border) 1px, transparent 1px)',
+            ].join(', '),
+            backgroundSize: '40px 40px',
+            opacity: 0.35,
+          }} />
+          <div style={{
+            position: 'absolute', bottom: 0, left: 0, right: 0,
+            padding: '0.75rem',
+            background: 'linear-gradient(to top, rgba(13,13,15,0.95) 0%, transparent 100%)',
+          }}>
+            <p style={{
+              fontFamily: 'JetBrains Mono, monospace',
+              fontSize: '0.5rem',
+              color: 'var(--gold)',
+              letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              marginBottom: '0.2rem',
+            }}>{project.category}</p>
+            <p style={{
+              fontFamily: 'JetBrains Mono, monospace',
+              fontSize: '0.7rem',
+              color: 'var(--text-dim)',
+              lineHeight: 1.2,
+            }}>{project.title}</p>
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
+
+interface HeroProps {
+  projects?: Project[]
+}
+
+export default function Hero({ projects = DEMO_PROJECTS }: HeroProps) {
   const [mounted, setMounted] = useState(false)
   useEffect(() => { setTimeout(() => setMounted(true), 100) }, [])
+
+  const row1 = buildTrack(projects)
+  const row2 = buildTrack(projects)
 
   return (
     <section style={{
@@ -12,7 +89,64 @@ export default function Hero() {
       justifyContent: 'flex-end',
       padding: '0 2.5rem 5rem',
       position: 'relative',
+      overflow: 'hidden',
     }}>
+
+      {/* Scrolling gallery */}
+      <div aria-hidden="true" style={{
+        position: 'absolute', inset: 0,
+        display: 'flex', flexDirection: 'column',
+        justifyContent: 'center', gap: TILE_GAP,
+        pointerEvents: 'none',
+      }}>
+        {/* Row 1 — left */}
+        <div style={{ overflow: 'hidden' }}>
+          <div style={{
+            display: 'flex',
+            width: 'max-content',
+            willChange: 'transform',
+            animation: 'gallery-scroll-left 30s linear infinite',
+          }}>
+            {row1.map((p, i) => <GalleryTile key={i} project={p} />)}
+          </div>
+        </div>
+
+        {/* Row 2 — right */}
+        <div style={{ overflow: 'hidden' }}>
+          <div style={{
+            display: 'flex',
+            width: 'max-content',
+            willChange: 'transform',
+            animation: 'gallery-scroll-right 36s linear infinite',
+          }}>
+            {row2.map((p, i) => <GalleryTile key={i} project={p} />)}
+          </div>
+        </div>
+
+        {/* Vertical gradient — dark at bottom (text area) and top, lighter in middle */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: `linear-gradient(to bottom,
+            rgba(13,13,15,0.92) 0%,
+            rgba(13,13,15,0.18) 22%,
+            rgba(13,13,15,0.18) 52%,
+            rgba(13,13,15,0.90) 70%,
+            rgba(13,13,15,1)    82%
+          )`,
+        }} />
+
+        {/* Horizontal vignette */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: `linear-gradient(to right,
+            rgba(13,13,15,1)    0%,
+            rgba(13,13,15,0)   10%,
+            rgba(13,13,15,0)   90%,
+            rgba(13,13,15,1)  100%
+          )`,
+        }} />
+      </div>
+
       {/* Ambient grid */}
       <div style={{
         position: 'absolute', inset: 0,
@@ -74,7 +208,7 @@ export default function Hero() {
           transform: mounted ? 'none' : 'translateY(12px)',
           transition: 'all 0.9s ease 0.4s',
         }}>
-          Building the bridge between art and engineering — 
+          Building the bridge between art and engineering —
           pipelines, shaders, rigs, and tools that let creative teams move faster.
         </p>
 
