@@ -1,4 +1,4 @@
-import { Project } from './supabase'
+import { Project, AboutContent, ABOUT_ID } from './supabase'
 
 export const DEMO_PROJECTS: Project[] = [
   {
@@ -72,3 +72,24 @@ export const DEMO_PROJECTS: Project[] = [
     created_at: new Date().toISOString(),
   },
 ]
+
+export const DEFAULT_ABOUT: AboutContent = {
+  id: ABOUT_ID,
+  heading: 'Art × Engineering',
+  bio: [
+    "I'm a Technical Artist and Animator completed my Master's at CMU's Entertainment Technology Center. I've shipped production work at EA Motive Studio across two co-op terms, building rigging pipelines, VFX systems, and tools that let artists focus on what matters.",
+    "My work lives at the intersection of art and code — I write Python pipelines in Maya, craft HLSL shaders in UE5, and build editor tools that make creative teams faster.",
+    "Currently building Moyu Office, a networking platform for game developers.",
+  ],
+  skills: [
+    { label: 'DCC', items: ['Maya', 'Houdini', 'Blender', 'MotionBuilder'] },
+    { label: 'Engines', items: ['Unreal Engine 5', 'Unity'] },
+    { label: 'Languages', items: ['Python', 'HLSL', 'GDScript', 'C#'] },
+    { label: 'Specialties', items: ['Rigging', 'Niagara VFX', 'Pipeline TD', 'Technical Shaders'] },
+  ],
+  experience: [
+    { role: 'Technical Artist Co-op', company: 'EA Motive Studio', period: '2024' },
+    { role: 'Technical Animator Co-op', company: 'EA Motive Studio', period: '2023' },
+    { role: "Master's — ETC", company: 'Carnegie Mellon University', period: '2024–2026' },
+  ],
+}

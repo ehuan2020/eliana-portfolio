@@ -57,6 +57,19 @@ create policy "Admin write" on projects for all using (true);
 insert into storage.buckets (id, name, public) values ('portfolio', 'portfolio', true);
 create policy "Public read" on storage.objects for select using (bucket_id = 'portfolio');
 create policy "Authenticated upload" on storage.objects for insert with check (bucket_id = 'portfolio');
+
+-- About section (single row, editable in Admin Mode)
+create table about (
+  id text primary key,
+  heading text not null default '',
+  bio text[] default '{}',
+  skills jsonb default '[]',
+  experience jsonb default '[]'
+);
+
+alter table about enable row level security;
+create policy "Public read" on about for select using (true);
+create policy "Admin write" on about for all using (true);
 ```
 
 ### 3. Add environment variables
@@ -79,12 +92,19 @@ Also update `.env.local` for local dev.
 2. Click the `···` button in the top-right nav
 3. Enter your admin password
 4. Click **Add Project** or the edit/delete icons on cards
+5. In the **About** section, click the pencil icon next to "About" to edit your bio, skills, and experience
 
-### In the editor:
+### In the project editor:
 - **Drag & drop** images (JPG, PNG, WebP), videos (MP4, MOV), or PDFs directly onto the upload zone
 - Set any image as the **cover** with the COVER button
 - Write your **writeup** in Markdown — `## Heading`, `**bold**`, `- bullet`
 - Toggle **Featured** to highlight key projects
+- Hit **Save Changes**
+
+### In the About editor:
+- Edit the **heading** and **bio** (separate paragraphs with a blank line)
+- Add/remove **skill groups** — each has a label and a comma-separated list of items
+- Add/remove **experience** entries — role, company, and period
 - Hit **Save Changes**
 
 ---

@@ -1,26 +1,50 @@
 'use client'
+import { useState, useEffect } from 'react'
+import { AboutContent, supabase, ABOUT_ID } from '@/lib/supabase'
+import { DEFAULT_ABOUT } from '@/lib/demo-data'
+import { useAdmin } from '@/contexts/AdminContext'
+import AboutEditor from './AboutEditor'
+import { Edit2 } from 'lucide-react'
+
 export default function AboutSection() {
-  const skills = [
-    { label: 'DCC', items: ['Maya', 'Houdini', 'Blender', 'MotionBuilder'] },
-    { label: 'Engines', items: ['Unreal Engine 5', 'Unity'] },
-    { label: 'Languages', items: ['Python', 'HLSL', 'GDScript', 'C#'] },
-    { label: 'Specialties', items: ['Rigging', 'Niagara VFX', 'Pipeline TD', 'Technical Shaders'] },
-  ]
+  const { isAdmin } = useAdmin()
+  const [about, setAbout] = useState<AboutContent>(DEFAULT_ABOUT)
+  const [editing, setEditing] = useState(false)
+
+  useEffect(() => {
+    const fetchAbout = async () => {
+      if (!process.env.NEXT_PUBLIC_SUPABASE_URL) return
+      const { data, error } = await supabase
+        .from('about')
+        .select('*')
+        .eq('id', ABOUT_ID)
+        .maybeSingle()
+      if (!error && data) setAbout(data)
+    }
+    fetchAbout()
+  }, [])
 
   return (
     <section id="about" style={{ padding: '6rem 2.5rem', borderTop: '1px solid var(--border)' }}>
       <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5rem' }}>
         <div>
-          <p style={{ fontFamily: 'JetBrains Mono', fontSize: '0.65rem', color: 'var(--gold)', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '0.5rem' }}>About</p>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+            <p style={{ fontFamily: 'JetBrains Mono', fontSize: '0.65rem', color: 'var(--gold)', letterSpacing: '0.14em', textTransform: 'uppercase' }}>About</p>
+            {isAdmin && (
+              <button onClick={() => setEditing(true)} style={{
+                background: 'var(--surface-2)', border: '1px solid var(--border)',
+                borderRadius: '4px', padding: '0.35rem', cursor: 'pointer',
+                display: 'flex', alignItems: 'center',
+              }}>
+                <Edit2 size={12} color="var(--text-muted)" />
+              </button>
+            )}
+          </div>
           <h2 style={{ fontFamily: 'Space Grotesk', fontWeight: 700, fontSize: 'clamp(1.8rem, 3vw, 2.4rem)', lineHeight: 1.1, marginBottom: '1.75rem' }}>
-            Art × Engineering
+            {about.heading}
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            {[
-              "I'm a Technical Artist and Animator completed my Master's at CMU's Entertainment Technology Center. I've shipped production work at EA Motive Studio across two co-op terms, building rigging pipelines, VFX systems, and tools that let artists focus on what matters.",
-              "My work lives at the intersection of art and code — I write Python pipelines in Maya, craft HLSL shaders in UE5, and build editor tools that make creative teams faster.",
-              "Currently building Moyu Office, a networking platform for game developers."
-            ].map((p, i) => (
+            {about.bio.map((p, i) => (
               <p key={i} style={{ fontFamily: 'Inter', fontWeight: 300, fontSize: '0.9rem', color: 'var(--text-muted)', lineHeight: 1.8 }}>{p}</p>
             ))}
           </div>
@@ -29,7 +53,7 @@ export default function AboutSection() {
         <div>
           <p style={{ fontFamily: 'JetBrains Mono', fontSize: '0.65rem', color: 'var(--gold)', letterSpacing: '0.14em', textTransform: 'uppercase', marginBottom: '1.5rem' }}>Toolset</p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-            {skills.map(group => (
+            {about.skills.map(group => (
               <div key={group.label}>
                 <p style={{ fontFamily: 'JetBrains Mono', fontSize: '0.6rem', color: 'var(--text-dim)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.6rem' }}>
                   {group.label}
@@ -50,12 +74,8 @@ export default function AboutSection() {
           {/* Experience */}
           <div style={{ marginTop: '2rem', paddingTop: '2rem', borderTop: '1px solid var(--border)' }}>
             <p style={{ fontFamily: 'JetBrains Mono', fontSize: '0.6rem', color: 'var(--text-dim)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '1rem' }}>Experience</p>
-            {[
-              { role: 'Technical Artist Co-op', company: 'EA Motive Studio', period: '2024' },
-              { role: 'Technical Animator Co-op', company: 'EA Motive Studio', period: '2023' },
-              { role: "Master's — ETC", company: 'Carnegie Mellon University', period: '2024–2026' },
-            ].map(e => (
-              <div key={e.role} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '0.75rem' }}>
+            {about.experience.map((e, i) => (
+              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: '0.75rem' }}>
                 <div>
                   <p style={{ fontFamily: 'Space Grotesk', fontWeight: 500, fontSize: '0.85rem', color: 'var(--text)' }}>{e.role}</p>
                   <p style={{ fontFamily: 'JetBrains Mono', fontSize: '0.65rem', color: 'var(--text-dim)', letterSpacing: '0.05em' }}>{e.company}</p>
@@ -66,6 +86,14 @@ export default function AboutSection() {
           </div>
         </div>
       </div>
+
+      {editing && (
+        <AboutEditor
+          about={about}
+          onSave={updated => { setAbout(updated); setEditing(false) }}
+          onClose={() => setEditing(false)}
+        />
+      )}
     </section>
   )
 }

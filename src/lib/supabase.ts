@@ -34,3 +34,24 @@ export interface Project {
 }
 
 export const CATEGORIES = ['All', 'Technical Art', 'Animation', 'Tools', 'VFX', 'Pipeline', 'Game Dev', 'Environment Art', 'Other']
+
+export interface SkillGroup {
+  label: string
+  items: string[]
+}
+
+export interface ExperienceEntry {
+  role: string
+  company: string
+  period: string
+}
+
+export interface AboutContent {
+  id: string
+  heading: string
+  bio: string[]
+  skills: SkillGroup[]
+  experience: ExperienceEntry[]
+}
+
+export const ABOUT_ID = 'main'
