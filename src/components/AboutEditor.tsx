@@ -13,6 +13,7 @@ export default function AboutEditor({ about, onSave, onClose }: Props) {
   const [heading, setHeading] = useState(about.heading)
   const [bio, setBio] = useState(about.bio.join('\n\n'))
   const [skills, setSkills] = useState<SkillGroup[]>(about.skills.map(s => ({ ...s })))
+  const [skillDrafts, setSkillDrafts] = useState<string[]>(about.skills.map(() => ''))
   const [experience, setExperience] = useState<ExperienceEntry[]>(about.experience.map(e => ({ ...e })))
   const [saving, setSaving] = useState(false)
 
@@ -20,10 +21,25 @@ export default function AboutEditor({ about, onSave, onClose }: Props) {
 
   const updateSkillLabel = (i: number, label: string) =>
     setSkills(s => s.map((g, idx) => idx === i ? { ...g, label } : g))
-  const updateSkillItems = (i: number, itemsRaw: string) =>
-    setSkills(s => s.map((g, idx) => idx === i ? { ...g, items: itemsRaw.split(',').map(t => t.trim()).filter(Boolean) } : g))
-  const addSkillGroup = () => setSkills(s => [...s, { label: '', items: [] }])
-  const removeSkillGroup = (i: number) => setSkills(s => s.filter((_, idx) => idx !== i))
+  const addSkillGroup = () => {
+    setSkills(s => [...s, { label: '', items: [] }])
+    setSkillDrafts(d => [...d, ''])
+  }
+  const removeSkillGroup = (i: number) => {
+    setSkills(s => s.filter((_, idx) => idx !== i))
+    setSkillDrafts(d => d.filter((_, idx) => idx !== i))
+  }
+
+  const setSkillDraft = (i: number, value: string) =>
+    setSkillDrafts(d => d.map((v, idx) => idx === i ? value : v))
+  const addSkillItem = (i: number) => {
+    const value = skillDrafts[i]?.trim()
+    if (!value) return
+    setSkills(s => s.map((g, idx) => idx === i && !g.items.includes(value) ? { ...g, items: [...g.items, value] } : g))
+    setSkillDraft(i, '')
+  }
+  const removeSkillItem = (i: number, item: string) =>
+    setSkills(s => s.map((g, idx) => idx === i ? { ...g, items: g.items.filter(x => x !== item) } : g))
 
   const updateExperience = (i: number, field: keyof ExperienceEntry, value: string) =>
     setExperience(e => e.map((entry, idx) => idx === i ? { ...entry, [field]: value } : entry))
@@ -127,11 +143,39 @@ export default function AboutEditor({ about, onSave, onClose }: Props) {
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
               {skills.map((g, i) => (
                 <div key={i} style={rowStyle}>
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '0.6rem' }}>
                     <input value={g.label} onChange={e => updateSkillLabel(i, e.target.value)}
                       placeholder="Group label (e.g. DCC)" style={{ ...inputStyle, fontSize: '0.8rem' }} />
-                    <input value={g.items.join(', ')} onChange={e => updateSkillItems(i, e.target.value)}
-                      placeholder="Items, comma-separated" style={{ ...inputStyle, fontSize: '0.8rem' }} />
+
+                    {g.items.length > 0 && (
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
+                        {g.items.map(item => (
+                          <span key={item} style={{
+                            display: 'flex', alignItems: 'center', gap: '0.35rem',
+                            fontFamily: 'Inter', fontSize: '0.8rem',
+                            background: 'var(--surface)', border: '1px solid var(--border)',
+                            borderRadius: '4px', padding: '0.25rem 0.4rem 0.25rem 0.7rem', color: 'var(--text-muted)',
+                          }}>
+                            {item}
+                            <button onClick={() => removeSkillItem(i, item)} style={{
+                              background: 'none', border: 'none', cursor: 'pointer',
+                              padding: '0.1rem', display: 'flex', alignItems: 'center',
+                            }}><X size={11} color="var(--text-dim)" /></button>
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    <div style={{ display: 'flex', gap: '0.4rem' }}>
+                      <input value={skillDrafts[i] || ''}
+                        onChange={e => setSkillDraft(i, e.target.value)}
+                        onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addSkillItem(i) } }}
+                        placeholder="Add a skill and press Enter"
+                        style={{ ...inputStyle, fontSize: '0.8rem' }} />
+                      <button onClick={() => addSkillItem(i)} style={iconButtonStyle}>
+                        <Plus size={12} color="var(--text-muted)" />
+                      </button>
+                    </div>
                   </div>
                   <button onClick={() => removeSkillGroup(i)} style={iconButtonStyle}>
                     <Trash2 size={12} color="#ef4444" />
