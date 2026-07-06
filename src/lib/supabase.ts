@@ -55,3 +55,29 @@ export interface AboutContent {
 }
 
 export const ABOUT_ID = 'main'
+
+export interface HeroContent {
+  id: string
+  eyebrow: string
+  name_first: string
+  name_last: string
+  blurb: string
+}
+
+export const HERO_ID = 'main'
+
+export interface ContactLink {
+  label: string
+  value: string
+  href: string
+}
+
+export interface ContactContent {
+  id: string
+  eyebrow: string
+  heading: string
+  blurb: string
+  links: ContactLink[]
+}
+
+export const CONTACT_ID = 'main'

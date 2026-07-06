@@ -1,7 +1,7 @@
 'use client'
 import { useState, useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { Project, MediaItem, MediaType, supabase, CATEGORIES } from '@/lib/supabase'
+import { Project, MediaItem, MediaType, CATEGORIES } from '@/lib/supabase'
 import { X, Upload, GripVertical, Trash2, Plus } from 'lucide-react'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -46,10 +46,13 @@ export default function ProjectEditor({ project, onSave, onClose }: Props) {
         : ext === 'pdf' ? 'pdf' : 'image'
 
       const path = `projects/${slugify(title || 'untitled')}/${uuidv4()}.${ext}`
-      const { data, error } = await supabase.storage.from('portfolio').upload(path, file)
+      const body = new FormData()
+      body.append('file', file)
+      body.append('path', path)
+      const res = await fetch('/api/upload', { method: 'POST', body })
 
-      if (!error && data) {
-        const { data: { publicUrl } } = supabase.storage.from('portfolio').getPublicUrl(path)
+      if (res.ok) {
+        const { publicUrl } = await res.json()
         newMedia.push({ id: uuidv4(), url: publicUrl, type, caption: file.name.replace(`.${ext}`, '') })
         if (type === 'image' && !coverUrl) setCoverUrl(publicUrl)
       }
@@ -89,8 +92,17 @@ export default function ProjectEditor({ project, onSave, onClose }: Props) {
     }
 
     if (supabaseConnected) {
-      const { error } = await supabase.from('projects').upsert(projectData)
-      if (error) { alert('Save failed: ' + error.message); setSaving(false); return }
+      const res = await fetch('/api/projects', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(projectData),
+      })
+      if (!res.ok) {
+        const { error } = await res.json()
+        alert('Save failed: ' + error)
+        setSaving(false)
+        return
+      }
     }
 
     onSave(projectData)

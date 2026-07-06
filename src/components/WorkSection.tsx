@@ -42,7 +42,8 @@ export default function WorkSection() {
   const handleDelete = async (id: string) => {
     if (!confirm('Delete this project?')) return
     if (process.env.NEXT_PUBLIC_SUPABASE_URL) {
-      await supabase.from('projects').delete().eq('id', id)
+      const res = await fetch(`/api/projects?id=${encodeURIComponent(id)}`, { method: 'DELETE' })
+      if (!res.ok) { alert('Delete failed'); return }
     }
     setProjects(prev => prev.filter(p => p.id !== id))
   }

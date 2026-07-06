@@ -48,15 +48,14 @@ create table projects (
   created_at timestamptz default now()
 );
 
--- Enable public read
+-- Public read only — writes go through the server (service role key),
+-- never directly from the browser's anon key.
 alter table projects enable row level security;
 create policy "Public read" on projects for select using (true);
-create policy "Admin write" on projects for all using (true);
 
 -- Storage bucket for media
 insert into storage.buckets (id, name, public) values ('portfolio', 'portfolio', true);
 create policy "Public read" on storage.objects for select using (bucket_id = 'portfolio');
-create policy "Authenticated upload" on storage.objects for insert with check (bucket_id = 'portfolio');
 
 -- About section (single row, editable in Admin Mode)
 create table about (
@@ -69,20 +68,49 @@ create table about (
 
 alter table about enable row level security;
 create policy "Public read" on about for select using (true);
-create policy "Admin write" on about for all using (true);
+
+-- Hero / intro section (single row, editable in Admin Mode)
+create table hero (
+  id text primary key,
+  eyebrow text not null default '',
+  name_first text not null default '',
+  name_last text not null default '',
+  blurb text not null default ''
+);
+
+alter table hero enable row level security;
+create policy "Public read" on hero for select using (true);
+
+-- Contact / "Get in Touch" section (single row, editable in Admin Mode)
+create table contact (
+  id text primary key,
+  eyebrow text not null default '',
+  heading text not null default '',
+  blurb text not null default '',
+  links jsonb default '[]'
+);
+
+alter table contact enable row level security;
+create policy "Public read" on contact for select using (true);
 ```
+
+> Note: there are deliberately no write policies here. Admin writes go
+> through Next.js API routes (`src/app/api/**`) using the Supabase
+> **service role key**, which bypasses RLS. The anon key shipped to the
+> browser can only ever read.
 
 ### 3. Add environment variables
 
 In Vercel project settings → Environment Variables:
 
-| Variable | Value |
-|---|---|
-| `NEXT_PUBLIC_SUPABASE_URL` | Your Supabase project URL |
-| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Your Supabase anon key |
-| `NEXT_PUBLIC_ADMIN_PASSWORD` | Your chosen admin password |
+| Variable | Value | Exposed to browser? |
+|---|---|---|
+| `NEXT_PUBLIC_SUPABASE_URL` | Your Supabase project URL | Yes |
+| `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Your Supabase anon (public) key | Yes |
+| `SUPABASE_SERVICE_ROLE_KEY` | Your Supabase **service_role** key (Settings → API) | **No — server only** |
+| `ADMIN_PASSWORD` | Your chosen admin password | **No — server only** |
 
-Also update `.env.local` for local dev.
+Also update `.env.local` for local dev. `SUPABASE_SERVICE_ROLE_KEY` and `ADMIN_PASSWORD` must **not** have the `NEXT_PUBLIC_` prefix — that prefix tells Next.js to bundle the value into client-side JavaScript, which would defeat the point of keeping them secret.
 
 ---
 
@@ -90,9 +118,9 @@ Also update `.env.local` for local dev.
 
 1. Open your portfolio site
 2. Click the `···` button in the top-right nav
-3. Enter your admin password
+3. Enter your admin password (verified server-side; a session cookie authorizes edits, the password itself never touches the client bundle)
 4. Click **Add Project** or the edit/delete icons on cards
-5. In the **About** section, click the pencil icon next to "About" to edit your bio, skills, and experience
+5. Click the pencil icon next to any section label — **Intro**, **About**, or **Get in Touch** — to edit its content
 
 ### In the project editor:
 - **Drag & drop** images (JPG, PNG, WebP), videos (MP4, MOV), or PDFs directly onto the upload zone
@@ -103,8 +131,17 @@ Also update `.env.local` for local dev.
 
 ### In the About editor:
 - Edit the **heading** and **bio** (separate paragraphs with a blank line)
-- Add/remove **skill groups** — each has a label and a comma-separated list of items
+- Add/remove **skills** within a group, or add/remove whole **skill groups**
 - Add/remove **experience** entries — role, company, and period
+- Hit **Save Changes**
+
+### In the Intro editor:
+- Edit the **eyebrow** tagline, **first/last name**, and **blurb**
+- Hit **Save Changes**
+
+### In the Get in Touch editor:
+- Edit the **eyebrow**, **heading**, and **blurb**
+- Add/remove **contact links** — label, display text, and URL
 - Hit **Save Changes**
 
 ---

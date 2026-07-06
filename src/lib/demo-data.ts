@@ -1,4 +1,4 @@
-import { Project, AboutContent, ABOUT_ID } from './supabase'
+import { Project, AboutContent, ABOUT_ID, HeroContent, HERO_ID, ContactContent, CONTACT_ID } from './supabase'
 
 export const DEMO_PROJECTS: Project[] = [
   {
@@ -91,5 +91,25 @@ export const DEFAULT_ABOUT: AboutContent = {
     { role: 'Technical Artist Co-op', company: 'EA Motive Studio', period: '2024' },
     { role: 'Technical Animator Co-op', company: 'EA Motive Studio', period: '2023' },
     { role: "Master's — ETC", company: 'Carnegie Mellon University', period: '2024–2026' },
+  ],
+}
+
+export const DEFAULT_HERO: HeroContent = {
+  id: HERO_ID,
+  eyebrow: 'Technical Artist · Animator · Tools Developer',
+  name_first: 'Eliana',
+  name_last: 'Huang',
+  blurb: 'Building the bridge between art and engineering — pipelines, shaders, rigs, and tools that let creative teams move faster.',
+}
+
+export const DEFAULT_CONTACT: ContactContent = {
+  id: CONTACT_ID,
+  eyebrow: 'Get in Touch',
+  heading: "Let's Work Together",
+  blurb: 'Open to full-time roles in Technical Art, Animation Pipeline, and Tools Development. Also happy to chat about your project.',
+  links: [
+    { label: 'Email', value: 'elianahuang2020@gmail.com', href: 'mailto:elianahuang2020@gmail.com' },
+    { label: 'LinkedIn', value: 'linkedin.com/in/eliana-huang', href: 'https://linkedin.com/in/eliana-huang/' },
+    { label: 'Portfolio', value: 'elianahuang.site', href: 'https://elianahuang.site' },
   ],
 }

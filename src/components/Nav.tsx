@@ -15,9 +15,9 @@ export default function Nav() {
     return () => window.removeEventListener('scroll', handler)
   }, [])
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (login(password)) {
+    if (await login(password)) {
       setShowLogin(false)
       setPassword('')
       setError(false)

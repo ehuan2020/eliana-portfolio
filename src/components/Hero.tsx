@@ -1,7 +1,10 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { Project } from '@/lib/supabase'
-import { DEMO_PROJECTS } from '@/lib/demo-data'
+import { Project, HeroContent, supabase, HERO_ID } from '@/lib/supabase'
+import { DEMO_PROJECTS, DEFAULT_HERO } from '@/lib/demo-data'
+import { useAdmin } from '@/contexts/AdminContext'
+import HeroEditor from './HeroEditor'
+import { Edit2 } from 'lucide-react'
 
 const TILE_W = 280
 const TILE_H = 180
@@ -76,8 +79,25 @@ interface HeroProps {
 }
 
 export default function Hero({ projects = DEMO_PROJECTS }: HeroProps) {
+  const { isAdmin } = useAdmin()
   const [mounted, setMounted] = useState(false)
+  const [hero, setHero] = useState<HeroContent>(DEFAULT_HERO)
+  const [editing, setEditing] = useState(false)
+
   useEffect(() => { setTimeout(() => setMounted(true), 100) }, [])
+
+  useEffect(() => {
+    const fetchHero = async () => {
+      if (!process.env.NEXT_PUBLIC_SUPABASE_URL) return
+      const { data, error } = await supabase
+        .from('hero')
+        .select('*')
+        .eq('id', HERO_ID)
+        .maybeSingle()
+      if (!error && data) setHero(data)
+    }
+    fetchHero()
+  }, [])
 
   const row1 = buildTrack(projects)
   const row2 = buildTrack(projects)
@@ -169,17 +189,27 @@ export default function Hero({ projects = DEMO_PROJECTS }: HeroProps) {
       }} />
 
       <div style={{ position: 'relative', maxWidth: '900px' }}>
-        <p style={{
-          fontFamily: 'JetBrains Mono, monospace',
-          fontSize: '0.72rem',
-          color: 'var(--gold)',
-          letterSpacing: '0.14em',
-          textTransform: 'uppercase',
-          marginBottom: '1.25rem',
-          opacity: mounted ? 1 : 0,
-          transform: mounted ? 'none' : 'translateY(8px)',
-          transition: 'all 0.7s ease 0.2s',
-        }}>Technical Artist · Animator · Tools Developer</p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1.25rem' }}>
+          <p style={{
+            fontFamily: 'JetBrains Mono, monospace',
+            fontSize: '0.72rem',
+            color: 'var(--gold)',
+            letterSpacing: '0.14em',
+            textTransform: 'uppercase',
+            opacity: mounted ? 1 : 0,
+            transform: mounted ? 'none' : 'translateY(8px)',
+            transition: 'all 0.7s ease 0.2s',
+          }}>{hero.eyebrow}</p>
+          {isAdmin && (
+            <button onClick={() => setEditing(true)} style={{
+              background: 'var(--surface-2)', border: '1px solid var(--border)',
+              borderRadius: '4px', padding: '0.35rem', cursor: 'pointer',
+              display: 'flex', alignItems: 'center',
+            }}>
+              <Edit2 size={12} color="var(--text-muted)" />
+            </button>
+          )}
+        </div>
 
         <h1 style={{
           fontFamily: 'Space Grotesk, sans-serif',
@@ -193,8 +223,8 @@ export default function Hero({ projects = DEMO_PROJECTS }: HeroProps) {
           transition: 'all 0.9s cubic-bezier(0.16,1,0.3,1) 0.1s',
           marginBottom: '1.75rem',
         }}>
-          Eliana<br />
-          <span style={{ color: 'var(--gold)' }}>Huang</span>
+          {hero.name_first}<br />
+          <span style={{ color: 'var(--gold)' }}>{hero.name_last}</span>
         </h1>
 
         <p style={{
@@ -208,8 +238,7 @@ export default function Hero({ projects = DEMO_PROJECTS }: HeroProps) {
           transform: mounted ? 'none' : 'translateY(12px)',
           transition: 'all 0.9s ease 0.4s',
         }}>
-          Building the bridge between art and engineering —
-          pipelines, shaders, rigs, and tools that let creative teams move faster.
+          {hero.blurb}
         </p>
 
         <div style={{
@@ -248,6 +277,14 @@ export default function Hero({ projects = DEMO_PROJECTS }: HeroProps) {
         <p style={{ fontFamily: 'JetBrains Mono', fontSize: '0.6rem', color: 'var(--text-dim)', letterSpacing: '0.1em', writingMode: 'vertical-rl' }}>scroll</p>
         <div style={{ width: '1px', height: '40px', background: 'linear-gradient(to bottom, var(--text-dim), transparent)' }} />
       </div>
+
+      {editing && (
+        <HeroEditor
+          hero={hero}
+          onSave={updated => { setHero(updated); setEditing(false) }}
+          onClose={() => setEditing(false)}
+        />
+      )}
     </section>
   )
 }

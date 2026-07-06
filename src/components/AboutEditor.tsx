@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { AboutContent, SkillGroup, ExperienceEntry, supabase, ABOUT_ID } from '@/lib/supabase'
+import { AboutContent, SkillGroup, ExperienceEntry, ABOUT_ID } from '@/lib/supabase'
 import { X, Trash2, Plus } from 'lucide-react'
 
 interface Props {
@@ -58,8 +58,17 @@ export default function AboutEditor({ about, onSave, onClose }: Props) {
     }
 
     if (supabaseConnected) {
-      const { error } = await supabase.from('about').upsert(aboutData)
-      if (error) { alert('Save failed: ' + error.message); setSaving(false); return }
+      const res = await fetch('/api/about', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(aboutData),
+      })
+      if (!res.ok) {
+        const { error } = await res.json()
+        alert('Save failed: ' + error)
+        setSaving(false)
+        return
+      }
     }
 
     onSave(aboutData)
