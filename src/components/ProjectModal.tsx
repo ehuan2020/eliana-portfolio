@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { Project, MediaItem } from '@/lib/supabase'
+import { useIsMobile } from '@/lib/useIsMobile'
 import { X, ChevronLeft, ChevronRight, FileText } from 'lucide-react'
 
 interface Props {
@@ -21,6 +22,7 @@ function renderMarkdown(text: string): string {
 
 export default function ProjectModal({ project, onClose }: Props) {
   const [mediaIndex, setMediaIndex] = useState(0)
+  const isMobile = useIsMobile()
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -56,18 +58,23 @@ export default function ProjectModal({ project, onClose }: Props) {
           border: '1px solid var(--border)',
           borderRadius: '10px',
           width: '100%', maxWidth: '1400px',
-          height: '90vh',
-          display: 'grid', gridTemplateColumns: '1.15fr 1fr',
-          overflow: 'hidden', // each column handles its own scroll
+          height: isMobile ? 'auto' : '90vh',
+          maxHeight: '90vh',
+          display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.15fr 1fr',
+          overflow: isMobile ? 'auto' : 'hidden', // desktop: each column scrolls itself; mobile: whole modal scrolls
         }}
       >
-        {/* ── Left: Media viewer ── */}
+        {/* ── Media viewer — second on mobile (words first, pictures below) ── */}
         <div style={{
           background: 'var(--surface-2)',
-          borderRight: '1px solid var(--border)',
-          borderRadius: '10px 0 0 10px',
+          borderRight: isMobile ? 'none' : '1px solid var(--border)',
+          borderBottom: isMobile ? '1px solid var(--border)' : 'none',
+          borderRadius: isMobile ? '0' : '10px 0 0 10px',
           display: 'flex', flexDirection: 'column',
           overflow: 'hidden',
+          order: isMobile ? 2 : 1,
+          height: isMobile ? '340px' : 'auto',
+          flexShrink: 0,
         }}>
           {/* Main viewer — expands to fill all leftover space */}
           <div style={{
@@ -191,10 +198,11 @@ export default function ProjectModal({ project, onClose }: Props) {
           )}
         </div>
 
-        {/* ── Right: Text content — independently scrollable ── */}
+        {/* ── Text content — first on mobile ── */}
         <div style={{
           display: 'flex', flexDirection: 'column',
-          overflow: 'hidden', // clip; inner div scrolls
+          overflow: isMobile ? 'visible' : 'hidden', // desktop: clip so inner div scrolls; mobile: flows with the modal's own scroll
+          order: isMobile ? 1 : 2,
         }}>
           {/* Sticky close + title header */}
           <div style={{
@@ -223,8 +231,13 @@ export default function ProjectModal({ project, onClose }: Props) {
             </button>
           </div>
 
-          {/* Scrollable body */}
-          <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: '1.75rem 2rem 2rem' }}>
+          {/* Scrollable body — desktop only; on mobile the whole modal scrolls as one unit */}
+          <div style={{
+            flex: isMobile ? 'none' : 1,
+            minHeight: isMobile ? 'auto' : 0,
+            overflowY: isMobile ? 'visible' : 'auto',
+            padding: '1.75rem 2rem 2rem',
+          }}>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
               <p style={{ fontFamily: 'Inter', fontWeight: 300, fontSize: '1rem', color: 'var(--text-muted)', lineHeight: 1.7 }}>
                 {project.description}

@@ -3,11 +3,13 @@ import { useState, useEffect } from 'react'
 import { AboutContent, supabase, ABOUT_ID } from '@/lib/supabase'
 import { DEFAULT_ABOUT } from '@/lib/demo-data'
 import { useAdmin } from '@/contexts/AdminContext'
+import { useIsMobile } from '@/lib/useIsMobile'
 import AboutEditor from './AboutEditor'
 import { Edit2 } from 'lucide-react'
 
 export default function AboutSection() {
   const { isAdmin } = useAdmin()
+  const isMobile = useIsMobile()
   const [about, setAbout] = useState<AboutContent>(DEFAULT_ABOUT)
   const [editing, setEditing] = useState(false)
 
@@ -26,7 +28,7 @@ export default function AboutSection() {
 
   return (
     <section id="about" style={{ padding: '6rem 2.5rem', borderTop: '1px solid var(--border)' }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '5rem' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? '3rem' : '5rem' }}>
         <div>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
             <p style={{ fontFamily: 'JetBrains Mono', fontSize: '0.65rem', color: 'var(--gold)', letterSpacing: '0.14em', textTransform: 'uppercase' }}>About</p>
