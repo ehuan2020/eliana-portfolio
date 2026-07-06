@@ -1,7 +1,7 @@
 'use client'
-import { useState, useEffect } from 'react'
-import { Project, CATEGORIES, supabase } from '@/lib/supabase'
-import { DEMO_PROJECTS } from '@/lib/demo-data'
+import { useState } from 'react'
+import { Project, CATEGORIES } from '@/lib/supabase'
+import { useProjects } from '@/lib/useProjects'
 import { useAdmin } from '@/contexts/AdminContext'
 import ProjectCard from './ProjectCard'
 import ProjectModal from './ProjectModal'
@@ -10,24 +10,10 @@ import { Plus } from 'lucide-react'
 
 export default function WorkSection() {
   const { isAdmin } = useAdmin()
-  const [projects, setProjects] = useState<Project[]>(DEMO_PROJECTS)
+  const { projects, setProjects } = useProjects()
   const [filter, setFilter] = useState('All')
   const [selected, setSelected] = useState<Project | null>(null)
   const [editing, setEditing] = useState<Project | null | 'new'>(null)
-  const [loaded, setLoaded] = useState(false)
-
-  useEffect(() => {
-    const fetchProjects = async () => {
-      if (!process.env.NEXT_PUBLIC_SUPABASE_URL) { setLoaded(true); return }
-      const { data, error } = await supabase
-        .from('projects')
-        .select('*')
-        .order('order_index', { ascending: true })
-      if (!error && data?.length) setProjects(data)
-      setLoaded(true)
-    }
-    fetchProjects()
-  }, [])
 
   const filtered = filter === 'All' ? projects : projects.filter(p => p.category === filter)
 

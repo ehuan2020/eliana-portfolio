@@ -1,7 +1,8 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { Project, HeroContent, supabase, HERO_ID } from '@/lib/supabase'
-import { DEMO_PROJECTS, DEFAULT_HERO } from '@/lib/demo-data'
+import { DEFAULT_HERO } from '@/lib/demo-data'
+import { useProjects } from '@/lib/useProjects'
 import { useAdmin } from '@/contexts/AdminContext'
 import HeroEditor from './HeroEditor'
 import { Edit2 } from 'lucide-react'
@@ -74,15 +75,15 @@ function GalleryTile({ project }: { project: Project }) {
   )
 }
 
-interface HeroProps {
-  projects?: Project[]
-}
-
-export default function Hero({ projects = DEMO_PROJECTS }: HeroProps) {
+export default function Hero() {
   const { isAdmin } = useAdmin()
+  const { projects } = useProjects()
   const [mounted, setMounted] = useState(false)
   const [hero, setHero] = useState<HeroContent>(DEFAULT_HERO)
   const [editing, setEditing] = useState(false)
+
+  const covered = projects.filter(p => p.cover_url)
+  const galleryProjects = covered.length > 0 ? covered : projects
 
   useEffect(() => { setTimeout(() => setMounted(true), 100) }, [])
 
@@ -99,8 +100,8 @@ export default function Hero({ projects = DEMO_PROJECTS }: HeroProps) {
     fetchHero()
   }, [])
 
-  const row1 = buildTrack(projects)
-  const row2 = buildTrack(projects)
+  const row1 = buildTrack(galleryProjects)
+  const row2 = buildTrack(galleryProjects)
 
   return (
     <section style={{
