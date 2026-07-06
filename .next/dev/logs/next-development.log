@@ -1,3 +1,0 @@
-{"timestamp":"00:00:28.508","source":"Server","level":"WARN","message":"⚠ Slow filesystem detected. The benchmark took 467ms. If D:\\eliana-portfolio\\.next/dev is a network drive, consider moving it to a local folder.\nSee more: https://nextjs.org/docs/app/guides/local-development"}
-{"timestamp":"00:01:03.991","source":"Server","level":"LOG","message":""}
-{"timestamp":"00:01:07.287","source":"Server","level":"LOG","message":"○ Compiling / ..."}
