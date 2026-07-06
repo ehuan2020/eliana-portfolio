@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import { Project } from '@/lib/supabase'
+import { useIsMobile } from '@/lib/useIsMobile'
 import { X, ChevronLeft, ChevronRight, FileText } from 'lucide-react'
 
 interface Props {
@@ -21,6 +22,7 @@ function renderMarkdown(text: string): string {
 
 export default function ProjectModal({ project, onClose }: Props) {
   const [mediaIndex, setMediaIndex] = useState(0)
+  const isMobile = useIsMobile()
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -45,7 +47,7 @@ export default function ProjectModal({ project, onClose }: Props) {
         position: 'fixed', inset: 0, zIndex: 100,
         background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(12px)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        padding: '1.5rem',
+        padding: isMobile ? '0.5rem' : '1.5rem',
       }}
       onClick={onClose}
     >
@@ -65,7 +67,7 @@ export default function ProjectModal({ project, onClose }: Props) {
         <div style={{
           flexShrink: 0,
           display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start',
-          padding: '2rem 2rem 1.25rem',
+          padding: isMobile ? '1.25rem 1.25rem 1rem' : '2rem 2rem 1.25rem',
           borderBottom: '1px solid var(--border)',
         }}>
           <div>
@@ -89,7 +91,7 @@ export default function ProjectModal({ project, onClose }: Props) {
         </div>
 
         {/* Scrollable body — description, then photos, then writeup */}
-        <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: '1.75rem 2rem 2rem' }}>
+        <div style={{ flex: 1, minHeight: 0, overflowY: 'auto', padding: isMobile ? '1.25rem 1rem 1.5rem' : '1.75rem 2rem 2rem' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
 
             {/* 1. Short description */}
@@ -134,7 +136,7 @@ export default function ProjectModal({ project, onClose }: Props) {
                   <img
                     src={currentMedia.url}
                     alt={currentMedia.caption || project.title}
-                    style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '1.25rem' }}
+                    style={{ width: '100%', height: '100%', objectFit: 'contain', padding: isMobile ? '0.5rem' : '1.25rem' }}
                   />
                 )}
                 {currentMedia?.type === 'video' && (
