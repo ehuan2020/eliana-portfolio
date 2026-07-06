@@ -22,11 +22,12 @@ function renderMarkdown(text: string): string {
 
 export default function ProjectModal({ project, onClose }: Props) {
   const [mediaIndex, setMediaIndex] = useState(0)
+  const [fullscreen, setFullscreen] = useState(false)
   const isMobile = useIsMobile()
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
+      if (e.key === 'Escape') { if (fullscreen) setFullscreen(false); else onClose() }
       if (e.key === 'ArrowRight') setMediaIndex(i => Math.min(i + 1, (project.media?.length || 1) - 1))
       if (e.key === 'ArrowLeft') setMediaIndex(i => Math.max(i - 1, 0))
     }
@@ -36,12 +37,13 @@ export default function ProjectModal({ project, onClose }: Props) {
       document.removeEventListener('keydown', handler)
       document.body.style.overflow = ''
     }
-  }, [onClose, project.media?.length])
+  }, [onClose, project.media?.length, fullscreen])
 
   const media = project.media || []
   const currentMedia = media[mediaIndex]
 
   return (
+    <>
     <div
       style={{
         position: 'fixed', inset: 0, zIndex: 100,
@@ -136,7 +138,8 @@ export default function ProjectModal({ project, onClose }: Props) {
                   <img
                     src={currentMedia.url}
                     alt={currentMedia.caption || project.title}
-                    style={{ width: '100%', height: '100%', objectFit: 'contain', padding: isMobile ? '0.5rem' : '1.25rem' }}
+                    onClick={() => setFullscreen(true)}
+                    style={{ width: '100%', height: '100%', objectFit: 'contain', padding: isMobile ? '0.5rem' : '1.25rem', cursor: 'zoom-in' }}
                   />
                 )}
                 {currentMedia?.type === 'video' && (
@@ -253,5 +256,65 @@ export default function ProjectModal({ project, onClose }: Props) {
         </div>
       </div>
     </div>
+
+    {/* Fullscreen lightbox */}
+    {fullscreen && currentMedia?.type === 'image' && (
+      <div
+        onClick={() => setFullscreen(false)}
+        style={{
+          position: 'fixed', inset: 0, zIndex: 300,
+          background: 'rgba(0,0,0,0.95)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          padding: isMobile ? '1rem' : '2.5rem',
+          cursor: 'zoom-out',
+        }}
+      >
+        <img
+          src={currentMedia.url}
+          alt={currentMedia.caption || project.title}
+          style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
+        />
+
+        <button
+          onClick={e => { e.stopPropagation(); setFullscreen(false) }}
+          style={{
+            position: 'absolute', top: '1.25rem', right: '1.25rem',
+            background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)',
+            borderRadius: '4px', padding: '0.5rem', cursor: 'pointer',
+            display: 'flex', alignItems: 'center',
+          }}
+        >
+          <X size={20} color="white" />
+        </button>
+
+        {media.length > 1 && (
+          <>
+            <button
+              onClick={e => { e.stopPropagation(); setMediaIndex(i => Math.max(i - 1, 0)) }}
+              style={{
+                position: 'absolute', left: '1.25rem', top: '50%', transform: 'translateY(-50%)',
+                background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)',
+                borderRadius: '5px', padding: '0.6rem', cursor: 'pointer',
+                opacity: mediaIndex === 0 ? 0.25 : 1, transition: 'opacity 0.15s',
+              }}
+            >
+              <ChevronLeft size={24} color="white" />
+            </button>
+            <button
+              onClick={e => { e.stopPropagation(); setMediaIndex(i => Math.min(i + 1, media.length - 1)) }}
+              style={{
+                position: 'absolute', right: '1.25rem', top: '50%', transform: 'translateY(-50%)',
+                background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)',
+                borderRadius: '5px', padding: '0.6rem', cursor: 'pointer',
+                opacity: mediaIndex === media.length - 1 ? 0.25 : 1, transition: 'opacity 0.15s',
+              }}
+            >
+              <ChevronRight size={24} color="white" />
+            </button>
+          </>
+        )}
+      </div>
+    )}
+    </>
   )
 }
