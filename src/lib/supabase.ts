@@ -81,3 +81,12 @@ export interface ContactContent {
 }
 
 export const CONTACT_ID = 'main'
+
+export interface ResumeContent {
+  id: string
+  url: string
+  filename: string
+  updated_at: string
+}
+
+export const RESUME_ID = 'main'

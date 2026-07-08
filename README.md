@@ -92,6 +92,17 @@ create table contact (
 
 alter table contact enable row level security;
 create policy "Public read" on contact for select using (true);
+
+-- Resume (single row, editable in Admin Mode)
+create table resume (
+  id text primary key,
+  url text not null default '',
+  filename text not null default '',
+  updated_at timestamptz
+);
+
+alter table resume enable row level security;
+create policy "Public read" on resume for select using (true);
 ```
 
 > Note: there are deliberately no write policies here. Admin writes go
@@ -143,6 +154,11 @@ Also update `.env.local` for local dev. `SUPABASE_SERVICE_ROLE_KEY` and `ADMIN_P
 - Edit the **eyebrow**, **heading**, and **blurb**
 - Add/remove **contact links** — label, display text, and URL
 - Hit **Save Changes**
+
+### In the Resume section:
+- Click **Upload Resume** (or **Replace Resume** if one's already set) and pick a PDF
+- It uploads immediately and the public **Download Resume** button updates right away — no separate save step
+- Re-uploading always replaces the same file path, so the link you've shared elsewhere never breaks
 
 ---
 

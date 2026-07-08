@@ -1,4 +1,4 @@
-import { Project, AboutContent, ABOUT_ID, HeroContent, HERO_ID, ContactContent, CONTACT_ID } from './supabase'
+import { Project, AboutContent, ABOUT_ID, HeroContent, HERO_ID, ContactContent, CONTACT_ID, ResumeContent, RESUME_ID } from './supabase'
 
 export const DEMO_PROJECTS: Project[] = [
   {
@@ -112,4 +112,11 @@ export const DEFAULT_CONTACT: ContactContent = {
     { label: 'LinkedIn', value: 'linkedin.com/in/eliana-huang', href: 'https://linkedin.com/in/eliana-huang/' },
     { label: 'Portfolio', value: 'elianahuang.site', href: 'https://elianahuang.site' },
   ],
+}
+
+export const DEFAULT_RESUME: ResumeContent = {
+  id: RESUME_ID,
+  url: '',
+  filename: '',
+  updated_at: '',
 }

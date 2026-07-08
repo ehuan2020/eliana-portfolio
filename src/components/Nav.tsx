@@ -50,7 +50,7 @@ export default function Nav() {
         </a>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-          {['Work', 'About', 'Contact'].map(item => (
+          {['Work', 'About', 'Resume', 'Contact'].map(item => (
             <a key={item} href={`#${item.toLowerCase()}`} style={{
               fontFamily: 'JetBrains Mono, monospace',
               fontSize: '0.75rem',
