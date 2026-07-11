@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import { Project } from '@/lib/supabase'
 import { useIsMobile } from '@/lib/useIsMobile'
+import { getYouTubeId, getYouTubeThumbnail, getYouTubeEmbedUrl } from '@/lib/youtube'
 import { X, ChevronLeft, ChevronRight, FileText } from 'lucide-react'
 
 interface Props {
@@ -160,6 +161,15 @@ export default function ProjectModal({ project, onClose }: Props) {
                     }}>Open PDF</a>
                   </div>
                 )}
+                {currentMedia?.type === 'youtube' && getYouTubeId(currentMedia.url) && (
+                  <iframe
+                    src={getYouTubeEmbedUrl(getYouTubeId(currentMedia.url)!)}
+                    title={currentMedia.caption || project.title}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    style={{ width: '100%', height: '100%', border: 'none' }}
+                  />
+                )}
 
                 {/* Prev / Next arrows */}
                 {media.length > 1 && (
@@ -210,13 +220,18 @@ export default function ProjectModal({ project, onClose }: Props) {
                   borderTop: '1px solid var(--border)',
                   overflowX: 'auto',
                 }}>
-                  {media.map((m, i) => (
+                  {media.map((m, i) => {
+                    const ytId = m.type === 'youtube' ? getYouTubeId(m.url) : null
+                    const thumbBg = m.type === 'image' ? `url(${m.url}) center/cover`
+                      : ytId ? `url(${getYouTubeThumbnail(ytId)}) center/cover`
+                      : 'var(--surface)'
+                    return (
                     <button
                       key={m.id}
                       onClick={() => setMediaIndex(i)}
                       style={{
                         width: '80px', height: '60px', flexShrink: 0,
-                        background: m.type === 'image' ? `url(${m.url}) center/cover` : 'var(--surface)',
+                        background: thumbBg,
                         border: `2px solid ${i === mediaIndex ? 'var(--gold)' : 'var(--border)'}`,
                         borderRadius: '4px', cursor: 'pointer',
                         display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -224,13 +239,14 @@ export default function ProjectModal({ project, onClose }: Props) {
                         outline: 'none',
                       }}
                     >
-                      {m.type !== 'image' && (
+                      {m.type !== 'image' && !ytId && (
                         <span style={{ fontFamily: 'JetBrains Mono', fontSize: '0.55rem', color: 'var(--gold)', letterSpacing: '0.06em' }}>
                           {m.type.toUpperCase()}
                         </span>
                       )}
                     </button>
-                  ))}
+                    )
+                  })}
                 </div>
               )}
 

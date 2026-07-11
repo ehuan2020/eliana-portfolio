@@ -8,7 +8,7 @@ export const supabase = createClient(
   supabaseKey || 'placeholder'
 )
 
-export type MediaType = 'image' | 'video' | 'pdf'
+export type MediaType = 'image' | 'video' | 'pdf' | 'youtube'
 
 export interface MediaItem {
   id: string

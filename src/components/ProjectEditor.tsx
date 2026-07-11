@@ -2,7 +2,8 @@
 import { useState, useCallback } from 'react'
 import { useDropzone } from 'react-dropzone'
 import { Project, MediaItem, MediaType, CATEGORIES } from '@/lib/supabase'
-import { X, Upload, GripVertical, Trash2, Plus } from 'lucide-react'
+import { getYouTubeId, getYouTubeThumbnail } from '@/lib/youtube'
+import { X, Upload, GripVertical, Trash2, Plus, Video } from 'lucide-react'
 import { v4 as uuidv4 } from 'uuid'
 
 interface Props {
@@ -28,6 +29,7 @@ export default function ProjectEditor({ project, onSave, onClose }: Props) {
   const [uploading, setUploading] = useState(false)
   const [uploadProgress, setUploadProgress] = useState('')
   const [saving, setSaving] = useState(false)
+  const [youtubeUrl, setYoutubeUrl] = useState('')
 
   const supabaseConnected = !!process.env.NEXT_PUBLIC_SUPABASE_URL
 
@@ -113,6 +115,13 @@ export default function ProjectEditor({ project, onSave, onClose }: Props) {
   const updateCaption = (id: string, caption: string) =>
     setMedia(m => m.map(x => x.id === id ? { ...x, caption } : x))
 
+  const addYoutubeLink = () => {
+    const id = getYouTubeId(youtubeUrl.trim())
+    if (!id) { alert('That doesn\'t look like a valid YouTube URL'); return }
+    setMedia(prev => [...prev, { id: uuidv4(), url: `https://www.youtube.com/watch?v=${id}`, type: 'youtube', caption: '' }])
+    setYoutubeUrl('')
+  }
+
   const inputStyle = {
     background: 'var(--surface-2)', border: '1px solid var(--border)',
     borderRadius: '4px', padding: '0.6rem 0.8rem',
@@ -192,7 +201,7 @@ export default function ProjectEditor({ project, onSave, onClose }: Props) {
 
           {/* Media dropzone */}
           <div>
-            <label style={labelStyle}>Media — Images, Videos, PDFs</label>
+            <label style={labelStyle}>Media — Images, Videos, PDFs, YouTube Links</label>
             <div {...getRootProps()} style={{
               border: `1.5px dashed ${isDragActive ? 'var(--gold)' : 'var(--border-2)'}`,
               borderRadius: '6px', padding: '2rem',
@@ -210,6 +219,25 @@ export default function ProjectEditor({ project, onSave, onClose }: Props) {
               </p>
             </div>
 
+            {/* YouTube link */}
+            <div style={{ display: 'flex', gap: '0.5rem', marginTop: '0.75rem' }}>
+              <input
+                value={youtubeUrl}
+                onChange={e => setYoutubeUrl(e.target.value)}
+                onKeyDown={e => { if (e.key === 'Enter') { e.preventDefault(); addYoutubeLink() } }}
+                placeholder="Paste a YouTube link — plays embedded on the site"
+                style={{ ...inputStyle, fontSize: '0.8rem' }}
+              />
+              <button onClick={addYoutubeLink} style={{
+                display: 'flex', alignItems: 'center', gap: '0.4rem', flexShrink: 0,
+                fontFamily: 'JetBrains Mono', fontSize: '0.65rem', letterSpacing: '0.06em', textTransform: 'uppercase',
+                background: 'var(--surface-2)', border: '1px solid var(--border)',
+                borderRadius: '4px', padding: '0 0.9rem', color: 'var(--text-muted)', cursor: 'pointer',
+              }}>
+                <Video size={14} /> Add
+              </button>
+            </div>
+
             {/* Media list */}
             {media.length > 0 && (
               <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
@@ -222,6 +250,12 @@ export default function ProjectEditor({ project, onSave, onClose }: Props) {
                   }}>
                     {m.type === 'image' ? (
                       <img src={m.url} style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '3px' }} alt="" />
+                    ) : m.type === 'youtube' ? (
+                      <img
+                        src={getYouTubeThumbnail(getYouTubeId(m.url) || '')}
+                        style={{ width: '40px', height: '40px', objectFit: 'cover', borderRadius: '3px' }}
+                        alt=""
+                      />
                     ) : (
                       <div style={{ width: '40px', height: '40px', background: 'var(--surface)', borderRadius: '3px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                         <span style={{ fontSize: '0.6rem', fontFamily: 'JetBrains Mono', color: 'var(--gold)', letterSpacing: '0.05em' }}>{m.type.toUpperCase()}</span>
@@ -234,14 +268,16 @@ export default function ProjectEditor({ project, onSave, onClose }: Props) {
                       style={{ ...inputStyle, padding: '0.35rem 0.6rem', fontSize: '0.8rem' }}
                     />
                     <div style={{ display: 'flex', gap: '0.4rem' }}>
-                      <button onClick={() => setCoverUrl(m.url)} title="Set as cover" style={{
-                        background: m.url === coverUrl ? 'rgba(200,169,110,0.2)' : 'var(--surface)',
-                        border: `1px solid ${m.url === coverUrl ? 'var(--gold-dim)' : 'var(--border)'}`,
-                        borderRadius: '3px', padding: '0.3rem 0.5rem',
-                        cursor: 'pointer', fontSize: '0.6rem', fontFamily: 'JetBrains Mono',
-                        color: m.url === coverUrl ? 'var(--gold)' : 'var(--text-dim)',
-                        letterSpacing: '0.06em',
-                      }}>COVER</button>
+                      {m.type !== 'youtube' && (
+                        <button onClick={() => setCoverUrl(m.url)} title="Set as cover" style={{
+                          background: m.url === coverUrl ? 'rgba(200,169,110,0.2)' : 'var(--surface)',
+                          border: `1px solid ${m.url === coverUrl ? 'var(--gold-dim)' : 'var(--border)'}`,
+                          borderRadius: '3px', padding: '0.3rem 0.5rem',
+                          cursor: 'pointer', fontSize: '0.6rem', fontFamily: 'JetBrains Mono',
+                          color: m.url === coverUrl ? 'var(--gold)' : 'var(--text-dim)',
+                          letterSpacing: '0.06em',
+                        }}>COVER</button>
+                      )}
                       <button onClick={() => removeMedia(m.id)} style={{
                         background: 'var(--surface)', border: '1px solid var(--border)',
                         borderRadius: '3px', padding: '0.3rem',
